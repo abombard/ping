@@ -110,7 +110,9 @@ int			read_echoreply(const int sock, const __be16 id, struct icmphdr *reply, lon
 		cur_time_to_usec(&cur_time);
 		*delay = cur_time - start_time;
 
+		ft_printf("recvfrom\n");
 		nbytes = recvfrom(sock, &rbuf, sizeof(rbuf), 0, NULL, NULL);
+		ft_printf("Ok\n");
 
 		if (nbytes < 0)
 		{
@@ -125,9 +127,11 @@ int			read_echoreply(const int sock, const __be16 id, struct icmphdr *reply, lon
 
 		ip = *(struct ip *)rbuf;
 		*reply = *(struct icmphdr *)((void *)rbuf + sizeof(struct ip));
-		if (reply->type != ICMP_ECHOREPLY || reply->un.echo.id != id)
-			continue ;
+
+		if (reply->type == ICMP_ECHOREPLY && reply->un.echo.id == id)
+			break ;
 	}
+	return (0);
 }
 
 int		checksum_isvalid(struct icmphdr *icmp)
