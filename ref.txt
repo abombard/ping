@@ -1,1 +1,0 @@
-https://github.com/sryze/ping/blob/master/src/ping.c
