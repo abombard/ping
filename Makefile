@@ -26,7 +26,9 @@ SRC=\
 	getopts.c\
 	usage.c\
 	checksum.c\
+	tvsub.c\
 	init.c\
+	gethostaddr.c\
 	pinger.c\
 	catcher.c\
 	finish.c\

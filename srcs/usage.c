@@ -2,5 +2,5 @@
 
 void	usage(char *prog)
 {
-	fprintf(stderr, "Usage: %s [-h|-v] ip\n", prog);
+	fprintf(stderr, "Usage: %s [-h|-v|-t <ttl>|-c <packet count>] ip\n", prog);
 }

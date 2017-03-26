@@ -2,13 +2,9 @@
 
 void				pinger(void)
 {
-#ifdef DEBUG
-	u_char			*packet = g_context.outpack;
-#else
 	u_char			packet[MAXPACKET];
-#endif
+	int				packlen;
 	struct icmphdr	*icmp;
-	int				cc;
 	int				i;
 	int				nbytes;
 
@@ -20,20 +16,19 @@ void				pinger(void)
 	icmp->un.echo.sequence = ++g_context.ntransmitted;
 	icmp->un.echo.id = g_context.ident;
 
-	CLR(icmp->un.echo.sequence % MAX_DUP_CK);
-	if (g_context.timing)
-	{
-		(void)gettimeofday((struct timeval *)(packet + sizeof(struct icmphdr)),
-			(struct timezone *)0);
-	}
-	cc = DATALEN + 8;
+	(void)gettimeofday((struct timeval *)(packet + sizeof(struct icmphdr)),
+		(struct timezone *)0);
 
-	icmp->checksum = compute_checksum((void *)icmp, cc);
+	packlen = DATALEN + 8;
+
+	icmp->checksum = compute_checksum((void *)icmp, packlen);
+
+	g_context.recv_table[icmp->un.echo.sequence % MAX_DUP_CK] = 0;
 
 	i = 0;
-	while (i < cc)
+	while (i < packlen)
 	{
-		nbytes = sendto(g_context.sockfd, (char *)packet, cc, 0,
+		nbytes = sendto(g_context.sockfd, (char *)packet, packlen, 0,
 				(struct sockaddr *)&g_context.sockaddr, g_context.sockaddrlen);
 		if (nbytes < 0)
 		{

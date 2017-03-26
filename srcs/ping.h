@@ -46,10 +46,6 @@ struct
 
 	char						recv_table[MAX_DUP_CK / 8];
 
-#ifdef DEBUG
-	u_char						outpack[MAXPACKET];
-#endif
-
 	int							ident;
 
 	long						npackets;
@@ -58,20 +54,15 @@ struct
 	long						ntransmitted;
 	int							interval;
 
-	int							timing;
 	long						tmin;
 	long						tmax;
 	u_long						tsum;
 
 	int							verbose;
 
-} g_context;
+	int							ttl;
 
-# define A(bit)		g_context.recv_table[(bit) >> 3]
-# define B(bit)		(1 << ((bit) & 0x07))
-# define SET(bit)	(A(bit) |= B(bit))
-# define CLR(bit)	(A(bit) &= (~B(bit)))
-# define TST(bit)	(A(bit) & B(bit))
+} g_context;
 
 /*
 ** init
@@ -85,11 +76,17 @@ int						getopts(int argc, char **argv);
 __sum16					compute_checksum(__u8 *buf, unsigned int size);
 
 /*
+** tvsub
+*/
+void					tvsub(struct timeval *out, struct timeval *in);
+
+/*
 ** ping
 */
 void					init(int argc, char **argv);
-void					pinger(void);
+void					gethostaddr(const int ai_family, const struct sockaddr *sockaddr);
 
+void					pinger(void);
 void					catcher(int signum);
 void					finish(int signum);
 

@@ -1,36 +1,5 @@
 #include "ping.h"
 
-static void		gethostaddrv4(const struct sockaddr *sockaddr)
-{
-	struct sockaddr_in	*sockaddr_in;
-
-	sockaddr_in = (struct sockaddr_in *)sockaddr;
-	inet_ntop(AF_INET, (void *)&sockaddr_in->sin_addr,
-			g_context.hostaddr, sizeof(g_context.hostaddr));
-}
-
-static void		gethostaddrv6(const struct sockaddr *sockaddr)
-{
-	struct sockaddr_in6	*sockaddr_in6;
-
-	sockaddr_in6 = (struct sockaddr_in6 *)sockaddr;
-	inet_ntop(AF_INET6, (void *)&sockaddr_in6->sin6_addr,
-			g_context.hostaddr, sizeof(g_context.hostaddr));
-}
-
-static void		gethostaddr(const int ai_family, const struct sockaddr *sockaddr)
-{
-	if (ai_family == AF_INET)
-		gethostaddrv4(sockaddr);
-	else if (ai_family == AF_INET6)
-		gethostaddrv6(sockaddr);
-	else
-	{
-		fprintf(stderr, PROGNAME ": gethostaddr: ai_family %d is not handled\n", ai_family);
-		exit(EXIT_FAILURE);
-	}
-}
-
 struct addrinfo		*gethostaddressesinfo(const char *hostaddr)
 {
 	struct addrinfo	*results;
@@ -83,12 +52,18 @@ static void		gethostaddrinfo(const char *hostaddr)
 extern void		init(int argc, char **argv)
 {
 	ft_bzero(&g_context, sizeof(g_context));
-	g_context.timing = 1;
 	g_context.interval = 1;
 	g_context.tmin = LONG_MAX;
 	g_context.tmax = 0;
 	g_context.ident = getpid() & 0xffff;
 	getopts(argc, argv);
 	gethostaddrinfo(g_context.hostname);
+	if (g_context.ttl != 0 &&
+		setsockopt(g_context.sockfd, IPPROTO_IP, IP_TTL,
+				&g_context.ttl, sizeof(g_context.ttl)))
+	{
+		perror(PROGNAME ": setsockopt ttl");
+		exit(EXIT_FAILURE);
+	}
 }
 

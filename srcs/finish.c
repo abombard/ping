@@ -13,12 +13,12 @@ void			finish(int signum)
 	if (g_context.ntransmitted)
 	{
 		if (g_context.nreceived > g_context.ntransmitted)
-			(void)printf("-- somebody's printing up paclets!");
+			(void)printf("-- somebody's printing up packets!");
 		else
 			(void)printf("%d%% packet loss", (int)(((g_context.ntransmitted - g_context.nreceived) * 100) / g_context.ntransmitted));
 	}
 	printf("\n");
-	if (g_context.nreceived && g_context.timing)
+	if (g_context.nreceived)
 	{
 		(void)printf("round-trip min/avg/max = %ld.%ld/%lu.%ld/%ld.%ld ms\n",
 			g_context.tmin / 10, g_context.tmin %10,
