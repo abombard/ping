@@ -32,7 +32,7 @@
 # define MAXPACKET		(65536 - 60 - 8)
 # define MAXWAIT		10
 
-# define MAX_DUP_CK	(8 * 128)
+# define MAX_DUP_CK		(8 * 128)
 
 struct
 {
