@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abombard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/06 15:06:12 by abombard          #+#    #+#             */
+/*   Updated: 2017/05/06 15:08:34 by abombard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ping.h"
 
 #ifdef DEBUG
@@ -49,7 +61,6 @@ long	round_triptime(struct timeval *tp)
 	long			triptime;
 
 	(void)gettimeofday(&tv, (struct timezone *)0);
-
 	tvsub(&tv, tp);
 	triptime = tv.tv_sec * 10000 + (tv.tv_usec / 100);
 	g_context.tsum += triptime;
@@ -154,20 +165,17 @@ int		recv_icmp(void)
 
 int		main(int argc, char **argv)
 {
-	init(argc, argv);
+	int		live;
 
+	init(argc, argv);
 	signal(SIGINT, finish);
 	signal(SIGALRM, catcher);
-
-	/* -- PING -- */
-
 	(void)printf("PING %s (%s): %d data bytes\n",
 		g_context.hostname, g_context.hostaddr, DATALEN);
-
 	catcher(0);
-	while (recv_icmp())
-		;
+	live = 1;
+	while (live)
+		live = recv_icmp();
 	finish(0);
-
 	return (0);
 }

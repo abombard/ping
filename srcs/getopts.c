@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   getopts.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abombard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/06 14:53:03 by abombard          #+#    #+#             */
+/*   Updated: 2017/05/06 14:54:51 by abombard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ping.h"
 #include "libft.h"
 
@@ -26,27 +38,20 @@ int			getopts(int argc, char **argv)
 	char	c;
 	int		i;
 
-	i = 1;
-	while ((c = ft_getopt(argv[i])))
+	i = 0;
+	while ((c = ft_getopt(argv[++i])))
 	{
 		if (c == 'v')
 			g_context.verbose = 1;
 		else if (c == 'c' && is_digit(argv[i + 1]) > 0)
-		{
-			g_context.npackets = ft_atoi(argv[i + 1]);
-			++i;
-		}
+			g_context.npackets = ft_atoi(argv[i++ + 1]);
 		else if (c == 't' && is_digit(argv[i + 1]) > 0)
-		{
-			g_context.ttl = ft_atoi(argv[i + 1]);
-			++i;
-		}
+			g_context.ttl = ft_atoi(argv[i++ + 1]);
 		else
 		{
 			usage(argv[0]);
 			exit(EXIT_FAILURE);
 		}
-		i++;
 	}
 	if (i != argc - 1)
 	{

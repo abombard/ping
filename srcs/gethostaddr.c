@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gethostaddr.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abombard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/06 14:49:58 by abombard          #+#    #+#             */
+/*   Updated: 2017/05/06 14:50:35 by abombard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ping.h"
 
 static void		gethostaddrv4(const struct sockaddr *sockaddr)
@@ -18,7 +30,8 @@ static void		gethostaddrv6(const struct sockaddr *sockaddr)
 			g_context.hostaddr, sizeof(g_context.hostaddr));
 }
 
-extern void		gethostaddr(const int ai_family, const struct sockaddr *sockaddr)
+extern void		gethostaddr(const int ai_family,
+					const struct sockaddr *sockaddr)
 {
 	if (ai_family == AF_INET)
 		gethostaddrv4(sockaddr);
@@ -26,7 +39,8 @@ extern void		gethostaddr(const int ai_family, const struct sockaddr *sockaddr)
 		gethostaddrv6(sockaddr);
 	else
 	{
-		fprintf(stderr, PROGNAME ": gethostaddr: ai_family %d is not handled\n", ai_family);
+		fprintf(stderr, PROGNAME ": gethostaddr: ai_family %d is not handled\n",
+				ai_family);
 		exit(EXIT_FAILURE);
 	}
 }

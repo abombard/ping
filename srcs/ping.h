@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ping.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abombard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/06 14:55:42 by abombard          #+#    #+#             */
+/*   Updated: 2017/05/06 14:57:30 by abombard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PING_H
 # define PING_H
 
@@ -17,7 +29,9 @@
 # include <errno.h>
 # include <limits.h>
 
-/* # define DEBUG */
+/*
+** # define DEBUG
+*/
 
 # define PROGNAME		"ft_ping"
 
@@ -34,7 +48,7 @@
 
 # define MAX_DUP_CK		(8 * 128)
 
-struct
+struct					s_context
 {
 	char						hostname[MAXADDRSIZE];
 	char						hostaddr[MAXADDRSIZE];
@@ -62,7 +76,7 @@ struct
 
 	int							ttl;
 
-} g_context;
+}						g_context;
 
 /*
 ** init
@@ -84,7 +98,8 @@ void					tvsub(struct timeval *out, struct timeval *in);
 ** ping
 */
 void					init(int argc, char **argv);
-void					gethostaddr(const int ai_family, const struct sockaddr *sockaddr);
+void					gethostaddr(const int ai_family,
+								const struct sockaddr *sockaddr);
 
 void					pinger(void);
 void					catcher(int signum);
