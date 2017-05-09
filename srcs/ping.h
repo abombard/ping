@@ -101,6 +101,10 @@ void					init(int argc, char **argv);
 void					gethostaddr(const int ai_family,
 								const struct sockaddr *sockaddr);
 
+long					round_triptime(struct timeval *tp);
+void					treat_icmp_echoreply(
+		struct icmphdr *icmp, int packlen, int ttl);
+
 void					pinger(void);
 void					catcher(int signum);
 void					finish(int signum);

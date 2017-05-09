@@ -32,6 +32,9 @@ SRC=\
 	pinger.c\
 	catcher.c\
 	finish.c\
+	treat_icmp_echoreply.c\
+	round_triptime.c\
+	ip_dump.c\
 
 OBJ=$(addprefix $(BUILD_DIR)/,$(SRC:.c=.o))
 
