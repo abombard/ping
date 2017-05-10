@@ -24,7 +24,7 @@ static int			icmp_init(struct icmphdr *icmp)
 	(void)gettimeofday((struct timeval *)(icmp + 1),
 		(struct timezone *)0);
 	packlen = DATALEN + 8;
-	icmp->checksum = compute_checksum((void *)packet, packlen);
+	icmp->checksum = compute_checksum((void *)icmp, packlen);
 	g_context.recv_table[icmp->un.echo.sequence % MAX_DUP_CK] = 0;
 	return (packlen);
 }

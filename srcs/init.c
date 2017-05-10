@@ -70,7 +70,7 @@ extern void			init(int argc, char **argv)
 	g_context.tmax = 0;
 	g_context.ident = getpid() & 0xffff;
 	getopts(argc, argv);
-	addresses = gethostaddressesinfo(g_context.hostaddr);
+	addresses = gethostaddressesinfo(g_context.hostname);
 	gethostaddrinfo(addresses);
 	freeaddrinfo(addresses);
 	if (g_context.ttl != 0 &&
