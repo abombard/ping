@@ -1,6 +1,6 @@
 CC=clang
-FLAGS=
 FLAGS42=-Wall -Wextra -Werror
+FLAGS=$(FLAGS42)
 
 NAME=ft_ping
 
@@ -61,17 +61,21 @@ $(NAME):$(LIBFT) $(PRINTF) $(LIST) $(OBJ)
 
 clean:
 	@rm -rf $(BUILD_DIR)
+	@make $@ -C $(LIBFT_DIR)
+	@make $@ -C $(PRINTF_DIR)
+	@make $@ -C $(LIST_DIR)
 
 fclean: clean
 	@rm -f $(NAME)
+	@make $@ -C $(LIBFT_DIR)
+	@make $@ -C $(PRINTF_DIR)
+	@make $@ -C $(LIST_DIR)
 
 re: fclean all
-
-test: $(NAME)
 
 # Make a highlight file for types.  Requires Exuberant ctags and awk
 types: types.vim
 types.vim: srcs/*.[ch] $(LIBS_DIR)/*/*.[h]
-		ctags --c-kinds=gstu -o- srcs/*.[ch] |\
+		ctags --C-kinds=gstu -o- srcs/*.[ch] |\
 				awk 'BEGIN{printf("syntax keyword Type\t")}\
 						{printf("%s ", $$1)}END{print ""}' > $@

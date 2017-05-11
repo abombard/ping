@@ -83,7 +83,7 @@ int		main(int argc, char **argv)
 	init(argc, argv);
 	signal(SIGINT, finish);
 	signal(SIGALRM, catcher);
-	(void)printf("PING %s (%s): %d data bytes\n",
+	(void)printf("PING %s (%s): %d(84) bytes of data.\n",
 		g_context.hostname, g_context.hostaddr, DATALEN);
 	catcher(0);
 	live = 1;
