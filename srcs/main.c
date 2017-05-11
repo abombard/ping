@@ -14,8 +14,15 @@
 
 void	unpack_iph(struct iphdr *ip, int *hlen, int *ttl)
 {
+	struct in_addr *ipv4addr;
+	struct hostent *he;
+	
 	*hlen = ip->ihl << 2;
 	*ttl = ip->ttl;
+	ipv4addr = (struct in_addr *)&ip->saddr;
+	he = gethostbyaddr(ipv4addr, sizeof(*ipv4addr), AF_INET);
+	ft_strncpy(g_context.truehostname, he->h_name,
+		sizeof(g_context.truehostname));
 }
 
 void	unpack_icmph(struct icmphdr *icmp,

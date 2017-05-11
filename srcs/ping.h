@@ -52,6 +52,7 @@ struct					s_context
 {
 	char						hostname[MAXADDRSIZE];
 	char						hostaddr[MAXADDRSIZE];
+	char						truehostname[MAXADDRSIZE];
 
 	struct sockaddr_storage		sockaddr;
 	socklen_t					sockaddrlen;

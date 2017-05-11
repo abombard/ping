@@ -45,7 +45,7 @@ void		treat_icmp_echoreply(struct icmphdr *icmp, int packlen, int ttl)
 	tp = (struct timeval *)(icmp + 1);
 	triptime = round_triptime(tp);
 	printf("%d bytes from %s (%s): icmp_seq=%u", packlen,
-		g_context.hostname, g_context.hostaddr, seq);
+		g_context.truehostname, g_context.hostaddr, seq);
 	printf(" ttl=%d", ttl);
 	printf(" time=%ld.%ld ms", triptime / 10, triptime % 10);
 	if (dup)
