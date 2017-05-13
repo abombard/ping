@@ -16,13 +16,19 @@ void	unpack_iph(struct iphdr *ip, int *hlen, int *ttl)
 {
 	struct in_addr *ipv4addr;
 	struct hostent *he;
-	
+
 	*hlen = ip->ihl << 2;
 	*ttl = ip->ttl;
 	ipv4addr = (struct in_addr *)&ip->saddr;
+	inet_ntop(AF_INET, ipv4addr,
+			g_context.hostaddr, sizeof(g_context.hostaddr));
 	he = gethostbyaddr(ipv4addr, sizeof(*ipv4addr), AF_INET);
-	ft_strncpy(g_context.truehostname, he->h_name,
-		sizeof(g_context.truehostname));
+	if (he)
+		ft_strncpy(g_context.truehostname, he->h_name,
+			sizeof(g_context.truehostname));
+	else
+		ft_strncpy(g_context.truehostname, g_context.hostaddr,
+				sizeof(g_context.truehostname));
 }
 
 void	unpack_icmph(struct icmphdr *icmp,
@@ -56,8 +62,8 @@ void	unpack(char *packet, int packlen)
 		treat_icmp_echoreply(icmp, packlen, ttl);
 	else if (g_context.verbose)
 	{
-		printf("%d bytes from %s: type=%d, code=%d\n", packlen,
-			g_context.hostname, type, code);
+		printf("%d bytes from %s (%s): type=%d, code=%d\n", packlen,
+			g_context.truehostname, g_context.hostaddr, type, code);
 	}
 }
 
@@ -87,6 +93,11 @@ int		main(int argc, char **argv)
 {
 	int		live;
 
+	if (getuid() != 0)
+	{
+		fprintf(stderr, PROGNAME ": Permission denied\n");
+		exit(EXIT_FAILURE);
+	}
 	init(argc, argv);
 	signal(SIGINT, finish);
 	signal(SIGALRM, catcher);
