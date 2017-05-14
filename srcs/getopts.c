@@ -30,7 +30,7 @@ static int	is_digit(char *arg)
 {
 	if (!arg)
 		return (0);
-	return (ft_atoi(arg));
+	return (ft_atoi(arg) > 0);
 }
 
 int			getopts(int argc, char **argv)
