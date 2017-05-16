@@ -14,14 +14,20 @@
 
 void	unpack_iph(struct iphdr *ip, int *hlen, int *ttl)
 {
-	struct in_addr *ipv4addr;
-	struct hostent *he;
+	struct in_addr	*ipv4addr;
+	struct hostent	*he;
+	char			*s;
 
 	*hlen = ip->ihl << 2;
 	*ttl = ip->ttl;
 	ipv4addr = (struct in_addr *)&ip->saddr;
-	inet_ntop(AF_INET, ipv4addr,
-			g_context.hostaddr, sizeof(g_context.hostaddr));
+	s = inet_ntoa(*ipv4addr);
+	if (!s)
+	{
+		perror("inet_ntoa");
+		exit(EXIT_FAILURE);
+	}
+	ft_strncpy(g_context.hostaddr, s, sizeof(g_context.hostaddr));
 	he = gethostbyaddr(ipv4addr, sizeof(*ipv4addr), AF_INET);
 	if (he)
 		ft_strncpy(g_context.truehostname, he->h_name,

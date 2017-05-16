@@ -55,7 +55,7 @@ static void			gethostaddrinfo(struct addrinfo *addresses)
 	}
 	ft_strncpy(g_context.hostname, rp->ai_canonname,
 			sizeof(g_context.hostname));
-	gethostaddr(rp->ai_family, rp->ai_addr);
+	gethostaddr(rp->ai_addr);
 	ft_memcpy(&g_context.sockaddr, rp->ai_addr, rp->ai_addrlen);
 	g_context.sockaddrlen = rp->ai_addrlen;
 }

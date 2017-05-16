@@ -99,8 +99,7 @@ void					tvsub(struct timeval *out, struct timeval *in);
 ** ping
 */
 void					init(int argc, char **argv);
-void					gethostaddr(const int ai_family,
-								const struct sockaddr *sockaddr);
+void					gethostaddr(const struct sockaddr *sockaddr);
 
 long					round_triptime(struct timeval *tp);
 void					treat_icmp_echoreply(
