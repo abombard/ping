@@ -12,12 +12,12 @@
 
 #include "ping.h"
 
-static void	unpack_icmph_echoreply(struct icmphdr *icmp,
+static void	unpack_icmph_echoreply(struct icmp *icmp,
 		int *id, int *seq, int *dup)
 {
-	*id = icmp->un.echo.id;
-	*seq = icmp->un.echo.sequence;
-	if (g_context.recv_table[icmp->un.echo.sequence % MAX_DUP_CK] != 0)
+	*id = icmp->icmp_id;
+	*seq = icmp->icmp_seq;
+	if (g_context.recv_table[icmp->icmp_seq % MAX_DUP_CK] != 0)
 	{
 		g_context.nrepeats += 1;
 		g_context.nreceived -= 1;
@@ -25,12 +25,12 @@ static void	unpack_icmph_echoreply(struct icmphdr *icmp,
 	}
 	else
 	{
-		g_context.recv_table[icmp->un.echo.sequence % MAX_DUP_CK] = 1;
+		g_context.recv_table[icmp->icmp_seq % MAX_DUP_CK] = 1;
 		*dup = 0;
 	}
 }
 
-void		treat_icmp_echoreply(struct icmphdr *icmp, int packlen, int ttl)
+void		treat_icmp_echoreply(struct icmp *icmp, int packlen, int ttl)
 {
 	int				id;
 	int				seq;
@@ -43,11 +43,11 @@ void		treat_icmp_echoreply(struct icmphdr *icmp, int packlen, int ttl)
 		return ;
 	g_context.nreceived += 1;
 	tp = (struct timeval *)(icmp + 1);
-	triptime = round_triptime(tp);
 	printf("%d bytes from %s (%s): icmp_seq=%u", packlen,
 		g_context.truehostname, g_context.hostaddr, seq);
 	printf(" ttl=%d", ttl);
-	printf(" time=%ld.%ld ms", triptime / 10, triptime % 10);
+	triptime = round_triptime(tp) / 2;
+	printf(" time=%ld.%ld ms", triptime / 100, triptime % 100);
 	if (dup)
 		printf(" (DUP!)");
 	printf("\n");

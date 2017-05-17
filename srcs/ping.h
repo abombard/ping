@@ -20,7 +20,7 @@
 # include <sys/signal.h>
 
 # include <netinet/ip.h>
-# include <linux/icmp.h>
+# include <netinet/ip_icmp.h>
 # include <arpa/inet.h>
 # include <netdb.h>
 # include <unistd.h>
@@ -37,8 +37,6 @@
 
 # define ADDRFAMILY		AF_INET
 # define MAXADDRSIZE	64
-
-# define ICMP_MINLEN	28
 
 # define DATALEN		(64 - 8)
 # define MAXIPLEN		60
@@ -88,7 +86,7 @@ int						getopts(int argc, char **argv);
 /*
 ** checksum
 */
-__sum16					compute_checksum(__u8 *buf, unsigned int size);
+uint16_t				compute_checksum(uint8_t *buf, unsigned int size);
 
 /*
 ** tvsub
@@ -103,7 +101,7 @@ void					gethostaddr(const struct sockaddr *sockaddr);
 
 long					round_triptime(struct timeval *tp);
 void					treat_icmp_echoreply(
-		struct icmphdr *icmp, int packlen, int ttl);
+		struct icmp *icmp, int packlen, int ttl);
 
 void					pinger(void);
 void					catcher(int signum);

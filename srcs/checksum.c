@@ -12,33 +12,33 @@
 
 #include "ping.h"
 
-__sum16	compute_checksum(__u8 *buf, unsigned int size)
+uint16_t	compute_checksum(uint8_t *buf, unsigned int size)
 {
-	__u64			sum;
+	uint64_t		sum;
 	unsigned int	i;
 
 	sum = 0;
 	i = 0;
 	while (i < size)
 	{
-		sum += *(__u16 *)buf;
-		buf += sizeof(__u16);
-		i += sizeof(__u16);
+		sum += *(uint16_t *)buf;
+		buf += sizeof(uint16_t);
+		i += sizeof(uint16_t);
 	}
 	if (size - i > 0)
-		sum += *(__u8 *)buf;
+		sum += *(uint8_t *)buf;
 	while ((sum >> 16) != 0)
 		sum = (sum & 0xffff) + (sum >> 16);
-	return ((__u16)~sum);
+	return ((uint16_t)~sum);
 }
 
-int		checksum_isvalid(struct icmphdr *icmp)
+int			checksum_isvalid(struct icmp *icmp)
 {
-	__sum16		checksum;
-	__sum16		expected_checksum;
+	uint16_t		checksum;
+	uint16_t		expected_checksum;
 
-	checksum = icmp->checksum;
-	icmp->checksum = 0;
-	expected_checksum = compute_checksum((void *)icmp, sizeof(struct icmphdr));
+	checksum = icmp->icmp_cksum;
+	icmp->icmp_cksum = 0;
+	expected_checksum = compute_checksum((void *)icmp, sizeof(struct icmp));
 	return (checksum == expected_checksum);
 }

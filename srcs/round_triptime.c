@@ -19,7 +19,7 @@ long	round_triptime(struct timeval *tp)
 
 	(void)gettimeofday(&tv, (struct timezone *)0);
 	tvsub(&tv, tp);
-	triptime = tv.tv_sec * 10000 + (tv.tv_usec / 100);
+	triptime = tv.tv_sec * 100000 + (tv.tv_usec / 10);
 	g_context.tsum += triptime;
 	if (triptime < g_context.tmin)
 		g_context.tmin = triptime;

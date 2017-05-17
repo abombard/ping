@@ -12,12 +12,12 @@
 
 #include "ping.h"
 
-void	ip_dump(struct iphdr *ip)
+void	ip_dump(struct ip *ip)
 {
-	printf("ip v %d size %d\n", ip->version, ip->ihl << 2);
+	printf("ip v %d size %d\n", ip->ip_v, ip->ip_hl << 2);
 	printf("tos %d tot_len %d id %d frag_off %d ttl %d protocol %d check %d\n",
-			ip->tos, ip->tot_len, ip->id, ip->frag_off, ip->ttl, ip->protocol,
-			ip->check);
-	printf("saddr %s daddr %s\n", inet_ntoa(*(struct in_addr *)&ip->saddr),
-			inet_ntoa(*(struct in_addr *)&ip->daddr));
+			ip->ip_tos, ip->ip_len, ip->ip_id, ip->ip_off, ip->ip_ttl, ip->ip_p,
+			ip->ip_sum);
+	printf("saddr %s daddr %s\n", inet_ntoa(*(struct in_addr *)&ip->ip_src),
+			inet_ntoa(*(struct in_addr *)&ip->ip_dst));
 }
